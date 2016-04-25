@@ -1,0 +1,234 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title Intro to npm
+
+    link(rel='stylesheet', type='text/css', href='build/build.css')
+
+  body
+
+    article
+      section
+        h1(style="margin-bottom: 1px;") npm
+        h3(style="font-size: 0.8em;") Node.js Timisoara Meetup Group - Dec 9, 2015
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:none;font-size: 0.8em;")
+          li Mihai Dima
+          li @mihaizn
+
+      section.full-imgs
+        h1(style="margin-bottom: 1px;") npm
+        br
+        img(src="images/npmjs.png")
+
+      section
+        h2 Summary
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li What npm is
+          li npm as a build and command line tool
+      
+      section
+        h2 What npm does
+        br
+        br
+        h3
+          strong Helps developers
+        ul(style="text-align:left;list-style-type:disc")
+          li share and reuse their JavaScript code
+          li update the shared code
+          li manage different versions of code  
+          li manages application dependencies
+
+      section
+        h2 What is an npm package
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Code put together as packages (also called modules)
+          li Folder with files in it and a package.json metadata file
+          li One (small) package solves one problem and solves it well
+          li One application can depend on tens of packages
+
+      section
+        h2 Types of npm packages
+        br
+        br
+        h3 Find packages on npmjs.com, over 213607 packages
+        ul(style="text-align:left;list-style-type:disc")
+          li Node modules (server side modules),
+          li Commands to use in command line,
+          li Frontend packages
+
+      section
+        h2 What is npm
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Database with package information,
+          li Command line client to publish and install packages,
+          li Site to search packages.
+
+      section
+        h2 Create a Node module
+        br
+        br
+        br
+        h3 Create a package json file
+        pre
+          code.language-javascript.
+            'npm init'
+
+      section
+        h2 package.json sample
+        br
+        br
+        p ! It keeps consistent dependencies between all your environments
+
+      section
+        h2 npm install
+        br
+        br
+        h3 Installs a package, and any packages that it depends on
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li install locally, globally
+          li --save, --save-dev, with the flag --save-exact
+          li --production flag (or NODE_ENV environment set to "production")
+
+      section
+        h2 The .npmrc, .npmignore files
+        br
+        h3
+          strong .npmrc
+        h3 npm gets its config settings from the command line, environment variables and npmrc files
+        br
+        h3
+          strong .npmignore
+        h3 Use it to keep stuff out of your package.
+        h3 If missing npm will ignore the stuff matched by .gitignore
+
+      section
+        h2
+          strong The scripts field, npm run
+        br
+        br
+        h3 npm run-script command (short version: npm run)
+        h3 Spawns a shell and executes the property value's command
+
+      section
+        h3 The scripts field, npm run (2)
+        br
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 2px !important;")
+          code.language-javascript.
+            { 
+              "name": "testModule", 
+              "scripts": {
+                "test": "mocha test/",
+                "lint": "jshint **.js --exclude node_modules",
+                "build-js": "browserify browser/main.js | uglifyjs -mc > static/bundle.js",
+                "build-css": "cat static/pages/*.css tabs/*/*.css > static/bundle.css",
+                "build": "npm run build-js && npm run build-css",
+              }
+            }
+        br
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 3px !important;")
+          code.language-javascript.
+            "scripts": {
+              "build": "...",
+              "git-commit": "git add -A . && git commit -a -m 'gh-pages update'",
+              "git-push": "git push origin gh-pages --force && git checkout master",
+              "deploy": "npm run build && npm run git-commit && npm run git-push"
+            }
+
+      section
+        h2 The scripts field, npm run (3)
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li `node_modules/.bin` is added to PATH, no need to `./node_modules/.bin/jshint **.js` or `$(npm bin)/jshint **.js`
+          li npm exposes env variables like running task, the package name and version, npm loglevel
+          li you can pass arguments to commands, config directive to pass env variables to scripts
+          li npm shortcut commands: npm test, npm start, npm stop
+
+
+      section
+        h2 The scripts field, npm run (4)
+        br
+        h3
+          strong You can automate tasks like:
+        ul(style="text-align:left;list-style-type:disc")
+          li Compile tasks
+          li Watch tasks
+          li LiveReload
+          li Doc generating
+          li Complexity Analysis
+          li and so on
+
+      section
+        h2 The scripts field, npm run (5)
+        h3 The .bin folder:
+        ul
+          li In local mode, executables linked into ./node_modules/.bin. Made available to scripts run through npm
+          li In global mode, executables linked into {prefix}/bin on Unix, or {prefix} on Windows
+        pre(style="font-size: 0.68em;")
+          code.language-javascript.
+            "dependencies": {
+                "socket.io": "0.7.7"
+            },
+            "bin": {
+                "watchjs": "bin/watch.bin.js"
+            }
+
+      section
+        h2 Pre and post hooks
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li prepublish: Run BEFORE the package is published. (Also run on local npm install without any arguments.)
+          li publish, postpublish: Run AFTER the package is published.
+          li pretest, test, posttest: Run by the npm test command.
+          li premyscript, myscript, postmyscript
+        pre(style="font-size: 0.6em;width: 100%;height: 100%;padding: 3px !important;")
+          code.language-javascript.
+            "scripts": {
+              "lint": "jshint **",
+              "build:css": "stylus assets/styles/main.styl > dist/main.css",
+              "build:js": "browserify assets/scripts/main.js > dist/main.js",
+              "build": "npm run build:css && npm run build:js",
+              "prebuild:js": "npm run lint"
+            }
+
+        h4 build will execute both build:css and build:js - but before it will run the lint task
+
+      section
+        h2 Pre and post hooks (2)
+        ul(style="text-align:left;list-style-type:disc")
+          li Reduce complexity
+          li Perform operations on your package before it is used
+          li Not depending on the OS
+          li Don't rely on users having certain tools
+        br
+        pre
+          code.language-javascript.
+            "scripts": {
+              "postinstall": "bower install && grunt build",
+            }
+
+      section
+        h1 Thank you!
+        br
+        br
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:none")
+          li Mihai Dima
+          li @mihaizn
+
+    script(src='build/build.js')

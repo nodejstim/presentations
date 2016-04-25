@@ -1,0 +1,306 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title Microservices. SenecaJS.
+
+    link(rel='stylesheet', type='text/css', href='build/build.css')
+
+  body
+
+    article
+      section
+        h1(style="margin-bottom: 1px;") npm
+        h3(style="font-size: 0.8em;") Node.js Timisoara Meetup Group - Apr 21, 2016
+        br
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:none;font-size: 0.8em;")
+          li
+            strong Mihai Dima
+          li https://github.com/mihaidma/
+          li @mihaizn
+          li
+            strong Cristian Kiss
+          li https://github.com/ckiss/
+          li @kissdevel
+
+      section
+        h2 Summary
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Microservices Architecture
+          li SenecaJS
+      
+      section
+        h2 Delivery Speed
+        br
+        br
+        br
+        h3 
+          strong Observe -> Orient -> Decide -> Act
+        br
+        h4 The speed at which you learn
+
+      section
+        h2 Hardware preparation
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Data center - 3 - 6 mo
+          li Virtual machines - 1 week - 1 mo
+          li Commercial clouds - 30 mins
+          li Docker - 10 seconds
+          li AWS Lambda
+
+      section
+        h2 Deliver Software
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Waterfall - 1 yr
+          li Waterfall with OO - 3-6 mo
+          li Agile - 1-2 mo
+          li A2 - 1 day - 1 week
+
+      section
+        h2 Monolithic structure
+        br
+        br
+        h3 Release plan – development – qa – release every few weeks.
+        br
+        h3 Enhancements
+        ul(style="text-align:left;list-style-type:disc")
+          li Break it into smaller pieces
+          li Off the shelf components reducing the work needed
+
+      section
+        h2 Microservices
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Very small
+          li Team size of one
+          li Loosely coupled (including flow)
+          li Multiple versions accepted/encouraged
+          li Self execution monitoring
+
+      section
+        h2 Microservices
+        br
+        h3
+          strong Loosely coupled service oriented architecture with bounded contexts
+        br
+        br
+        h3 3-4 years concept, lack of experience
+
+      section
+        h2 Microservices (challenges)
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Loose coupling: update them independently, should not be organization coupled
+          li Denormalized data model: lots of data stores
+          li Bounded contexts. Extremely powerful composition
+
+      section
+        h2 Microservices
+        br
+        br
+        br
+        h3
+          strong State of the art architectures:
+        h3 Netflix, Gilt, Twitter, Groupon, HailO
+
+      section.full-imgs
+        h3(style="margin-bottom: 1px;") SenecaJS - microservices toolkit for Node.js
+        br
+        img(src="images/senecajs.png")
+
+      section
+        h2 SenecaJS - core features:
+        br
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li
+            strong Pattern matching
+            pre(style="font-size: 0.68em;")
+              code.language-javascript.
+                role: search, cmd: search
+                role: search, cmd: insert
+                role:info, req: part
+            br
+            br
+          li
+            strong Transport independence
+
+      section
+        h2 SenecaJS
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Define specs in terms of messages IN and OUT
+          pre(style="font-size: 0.6em;width: 100%;height: 100%;padding: 3px !important;")
+            code.language-javascript.
+              IN:
+                role:search, cmd:search // sync
+                role:search, cmd:insert // async
+
+              OUT:
+                role:info, cmd:get // sync
+              ...
+          li Service interaction
+            pre(style="font-size: 0.6em;width: 100%;height: 100%;padding: 3px !important;")
+              code.language-javascript.
+                // role: search, cmd: search
+                consumed:
+                  nodezoo-web -> nodezoo-search
+
+                // role: info, cmd: get
+                consumed:
+                  nodezoo-web -> nodezoo-info
+
+
+      section
+        h2 SenecaJS
+        br
+        br
+        br
+        h4 Over 200 plugins in various areas:
+        br
+        ul(style="text-align:left;list-style-type:disc")
+          li Storage
+          li Transport
+          li Web (Express, Hapi)
+          li User, Authentication
+          li Utilities
+
+      section
+        h2 SenecaJS - Pattern matching
+        br
+        br
+        h3 Add an action pattern:
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 2px !important;")
+          code.language-javascript.
+            seneca.add({role: 'math', cmd: 'sum'}, function (msg, respond) {
+              var sum = msg.left + msg.right
+              respond(null, {answer: sum})
+            })
+        br
+        br
+        h3 Submit a message to act on:
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 2px !important;")
+          code.language-javascript.
+            seneca.act({role: 'math', cmd: 'sum', left: 1, right: 2}, function (err, result) {
+              if (err) return console.error(err)
+              console.log(result)
+            })
+
+      section
+        h2 SenecaJS - Pattern matching
+        h3 Extending functionality:
+        pre(style="font-size: 0.4em;width: 100%;height: 100%;padding: 1px !important;")
+          code.language-javascript.
+            seneca.add({role: 'math', cmd: 'sum'}, function (msg, respond) {
+              var sum = msg.left + msg.right
+              respond(null, {answer: sum})
+            })
+
+            seneca.add({role: 'math', cmd: 'sum', integer: true}, function (msg, respond) {
+              var sum = Math.floor(msg.left) + Math.floor(msg.right)
+              respond(null, {answer: sum})
+            })
+        h3 Code re-use with patterns:
+        pre(style="font-size: 0.4em;width: 100%;height: 100%;padding: 1px !important;")
+          code.language-javascript.
+            seneca.add('role: math, cmd: sum', function (msg, respond) {
+              var sum = msg.left + msg.right
+              respond(null, {answer: sum})
+            })
+            seneca.add('role: math, cmd: sum, integer: true', function (msg, respond) {
+              // reuse role:math, cmd:sum
+              this.act({
+                role: 'math', cmd: 'sum', left: Math.floor(msg.left), right: Math.floor(msg.right)
+              }, respond)
+            })
+
+      section
+        h2 SenecaJS - Data Storage
+        br
+        h3 seneca-entity provides a simple data abstraction layer (“ORM”)
+        h3 Based on the following operations:
+        h3
+          strong load, save, list, remove
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 2px !important;")
+          code.language-javascript.
+            var seneca = require('seneca')()
+            seneca.use('entity')
+
+            var product = seneca.make('product')
+            product.name = 'Apple'
+            product.price = 1.99
+
+            // sends role:entity,cmd:save,name:product messsage
+            product.save$( console.log )
+
+      section
+        h2 SenecaJS - Transport
+        br
+        h3 Transport independence: your business logic does not need to know how messages are transported or which service will get them
+        br
+        br
+        br
+        pre(style="font-size: 0.5em;width: 100%;height: 100%;padding: 2px !important;")
+          code.language-javascript.
+
+            // IP, port
+            seneca.client({port: 8080, host: '192.168.0.2'}) → seneca.listen({port: 8080, host: '192.168.0.2'})
+
+            // specific protocol
+            seneca.client({type: 'tcp'}) → seneca.listen({type: 'tcp'})
+
+      section.full-imgs
+        h3(style="margin-bottom: 1px;") NodeConf London 2016
+        br
+        img(src="images/nodeconf.png")
+        br
+        h5 one free ticket
+        h5 5 discount codes: 50% "timisoara-50"
+        h5 discount codes: 25% "timisoara-25"
+
+      section.full-imgs
+        h3(style="margin-bottom: 1px;") NodeZoo
+        br
+        img(src="images/nodezoo.png")
+
+      section.full-imgs
+        h3(style="margin-bottom: 1px;") NodeZoo
+        br
+        img(src="images/nodezoo-info2.png")
+
+      section.full-imgs
+        h3(style="margin-bottom: 1px;") NodeZoo
+        br
+        img(src="images/nodezoo-structure.png")
+
+      section
+        h1 Thank you!
+        br
+        br
+        br
+        br
+        br
+        ul(style="text-align:left;list-style-type:none")
+          li
+            strong Mihai Dima
+          li https://github.com/mihaidma/
+          li @mihaizn
+          li
+            strong Cristian Kiss
+          li https://github.com/ckiss/
+          li @kissdevel
+
+    script(src='build/build.js')
